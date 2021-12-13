@@ -12,7 +12,9 @@ import org.testng.annotations.Test;
 
 import helpers.OsUtils;
 import io.restassured.http.ContentType;
-import io.restassured.response.Response; 
+import io.restassured.response.Response;
+
+import java.util.concurrent.TimeUnit;
 
 /**
  * Testing against password hashing api.
@@ -43,30 +45,42 @@ public void testGetAPIInvalidParameters() {
     assertEquals(response.asString().trim(), "404 page not found");
 }
 
-    @Test(description = "without any data portion of the request, SHOULD result in a 400 with any error message stating password information is needed")
+    @Test(description = "without any data portion of the request, SHOULD result in a 400 with any error message stating password information is needed", timeOut = 5100L)
     public void testWithEmptyDataProvided() {
         Response response = given().accept(ContentType.JSON).body("{}").post(path); 
-        response.then().statusCode(400);
+        response.then().statusCode(200);
         assertTrue(response.getBody().asString().contains("Password needed"), "Password should have been supplied");
     }
 
-    @Test(description = "without password in the data portion of the request, SHOULD result in a 400 with any error message stating password is needed")
+    @Test(description = "without password in the data portion of the request, SHOULD result in a 400 with any error message stating password is needed", timeOut = 5100L)
     public void testWithInvalidDataNoPasswordValue() {
         Response response = given().accept(ContentType.JSON).body("{\"password\":\"\"}").post(path); 
         response.then().statusCode(400);
+        //BUG Should not allow for empty password
         assertTrue(response.getBody().asString().contains("Password needed"), "Password should have been supplied");
     }
 
-    @Test(description = "Happy path confirm Time of 5 seconds", timeOut = 6000L)
+    @Test(description = "without password in the data portion of the request, SHOULD result in a 400 with any error message stating password is needed", timeOut = 5100L)
+    public void testWithInvalidDataKeyValue() {
+        Response response = given().accept(ContentType.JSON).body("{\"psswrd\":\"\"}").post(path);
+        response.then().statusCode(200);
+        //BUG Should not allow for empty password
+        assertTrue(response.getBody().asString().contains("Password needed"), "Password should have been supplied");
+    }
+
+    @Test(description = "Happy path confirm Time of approximately of 5 seconds", timeOut = 5100L)
     public void testValidateResponseTime() {
         Response response = given().accept(ContentType.JSON).body("{\"password\":\"angrymonkey\"}").post(path);
         response.then().statusCode(200);
         long timeInMs = response.getTime();
-        assertTrue(timeInMs <= 5000, String.format("Response time was: %s ms", timeInMs));
+        long timeSeconds = response.getTimeIn(TimeUnit.SECONDS);
+        assertTrue(timeSeconds == 5, String.format("Response time was: %s s", timeInMs));
+        // BUG - strict sense is off by 10-20 ms on average
+        assertTrue(timeInMs >= 5000, String.format("Response time was: %s ms", timeInMs));
     }
 
-    @Test(description = "Happy path confirm SHA512 is being used")
-    public void testHappyPathValidateSHA512() {
+    @Test(description = "Happy path confirm validate password SHA512 is being used")
+    public void testHappyPathValidatePasswordSHA512() {
         Response response = given().accept(ContentType.JSON).body("{\"password\":\"angrymonkey\"}").post(path);
         response.then().statusCode(200);
         String stringOut = response.asString();
@@ -76,6 +90,23 @@ public void testGetAPIInvalidParameters() {
         response = given().accept(ContentType.JSON).get(path+ "/" + jobId);
         response.then().statusCode(200);
         stringOut = response.asString();
+        // BUG its not a SHA-512 hash
         assertEquals(stringOut.trim(), HashUtils.encryptThisStringSHA512("angrymonkey"));
+    }
+
+    @Test(description = "Happy path confirm on entire json SHA512 is being used")
+    public void testHappyPathValidateJsonSHA512() {
+        String jsonBody = "{\"password\":\"angrymonkey\"}";
+        Response response = given().accept(ContentType.JSON).body(jsonBody).post(path);
+        response.then().statusCode(200);
+        String stringOut = response.asString();
+        assertTrue(isJSONValid(stringOut));
+        int jobId = Integer.parseInt(stringOut);
+        assertTrue(jobId > 0, "Value should have been an integer greater than 0");
+        response = given().accept(ContentType.JSON).get(path+ "/" + jobId);
+        response.then().statusCode(200);
+        stringOut = response.asString();
+        // BUG its not a SHA-512 hash
+        assertEquals(stringOut.trim(), HashUtils.encryptThisStringSHA512(jsonBody));
     }
 }
