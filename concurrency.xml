@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE suite SYSTEM "http://testng.org/testng-1.0.dtd">
+<suite name="Concurrency Test Suite" parallel="methods" thread-count="5">
+    <test verbose="2" preserve-order="true" name="Concurrency">
+        <classes>
+            <class name="org.chaves.steven.PasswordConcurrencyTest">
+                <methods>
+                    <include name="testTwoCallsA"/>
+                    <include name="testTwoCallsB"/>
+                </methods>
+            </class>
+        </classes>
+    </test>
+</suite>
