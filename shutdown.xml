@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE suite SYSTEM "http://testng.org/testng-1.0.dtd">
+<suite name="Shutdown Test Suite" parallel="methods" thread-count="5">
+    <test verbose="2" preserve-order="true" name="Shutdown">
+        <classes>
+            <class name="org.chaves.steven.PasswordShutdownTest">
+                <methods>
+                    <include name="testTwoCalls"/>
+                    <include name="testShutdown"/>
+                </methods>
+            </class>
+        </classes>
+    </test>
+</suite>

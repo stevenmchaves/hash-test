@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE suite SYSTEM "http://testng.org/testng-1.0.dtd">
+<suite name="All Test Suite">
+    <test verbose="2" preserve-order="true" name="C:/hash-test">
+        <classes>
+            <class name="org.chaves.steven.PasswordConcurrencyTest">
+                <methods>
+                    <include name="testTwoCalls"/>
+                </methods>
+            </class>
+            <class name="org.chaves.steven.PasswordGetHashingTest">
+                <methods>
+                    <include name="testGetAPI"/>
+                    <include name="testPostAPI"/>
+                    <include name="testGetAPIInvalidParameters"/>
+                    <include name="testHappyPath"/>
+                </methods>
+            </class>
+            <class name="org.chaves.steven.PasswordPostHashingTest">
+                <methods>
+                    <include name="testGetAPI"/>
+                    <include name="testPostAPI"/>
+                    <include name="testGetAPIInvalidParameters"/>
+                    <include name="testHappyPath"/>
+                </methods>
+            </class>
+            <class name="org.chaves.steven.PasswordStatsHashingTest">
+                <methods>
+                    <include name="testWithParameters"/>
+                    <include name="testWithEmptyDataProvided"/>
+                    <include name="testWithProvingData"/>
+                    <include name="testHappyPath"/>
+                    <include name="testStatsTotalRequests"/>
+                </methods>
+            </class>
+        </classes>
+    </test>
+</suite>
