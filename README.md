@@ -1,6 +1,7 @@
 # hash-test
 
-This assignment was done leveraging `Java`, `mvn`, `RestAssured`, `TestNG, and some other Java libraries for `base64` and `SHA512` validation.
+This assignment was done leveraging `Java`, `mvn`, `RestAssured`, `TestNG, and some other Java libraries for `base64` and `SHA512` validation. <br>
+<b>Note: I believe the repo is SAFE from the log4j issues. I am using the latest versions of the maven dependencies</b>
 
 ## Pre-reqs
 * Clone repo
@@ -13,9 +14,11 @@ This assignment was done leveraging `Java`, `mvn`, `RestAssured`, `TestNG, and s
 ## Test Cases Covered in Test Automation
 
 * Application only answers on the PORT specified in the PORT environment
-* Validated that simultaneousl requests can be made meaning that multiconnections can be made.
+* Validated that simultaneousl requests can be made meaning that multiconnections can be made. This can be seen in the execution of the `concurrency.xml` TestNG.xml file <br>
+  The execution runs to test run concurrently in 5 threads. See `org.chaves.steven.PasswordConcurrencyTest` for further information. 
 
-### Shutdown 
+### Shutdown
+The test cases/validation points below are validated by running the `shutdown.xml` TestNG file. This file runs test methods concurrently which allows the validates of the pending request validations to occur. See  `org.chaves.steven.PasswordShutdownTest` for further information.
 * Found that there are occurences on shutdown that the `port` is left open
 * Validated that In-flight requests are completed
 * Validated that rejects for new requests are done. Was not able to validated
