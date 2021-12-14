@@ -20,8 +20,8 @@ This assignment was done leveraging `Java`, `mvn`, `RestAssured`, `TestNG, and s
   The execution runs to test run concurrently in 5 threads. See `org.chaves.steven.PasswordConcurrencyTest` for further information. 
 
 #### Execute concurrency tests
-# Start the server up first.
-# `mvn test -P concurrency-test`
+1. Start the server up first.
+1. `mvn test -P concurrency-test`
 
 
 ### Shutdown
@@ -32,8 +32,8 @@ The test cases/validation points below are validated by running the `shutdown.xm
 * Validated that any additional while shutdown is is pending or completed results in `Connection refused`
 
 #### Execute shutdown tests
-# Start the server up first.
-# `mvn test -P shutdown-test`
+1. Start the server up first.
+1. `mvn test -P shutdown-test`
 <br>Note: The test cleanup tries to restart the server again. If it fails, start up the server again before executing the next test suite. 
 
 ### Standard Set of tests
@@ -55,5 +55,5 @@ The test cases/validation points below are validated by running the `shutdown.xm
 * Validated that the response has 'AverageTime` in milliseconds
 
 #### Execute standard set
-# Make sure the server is started
-# `mvn test`
+1. Make sure the server is started
+1. `mvn test`
