@@ -31,23 +31,19 @@ public class PasswordStatsHashingTest {
         assertEquals(response.asString().trim(), "404 page not found");
     }
 
-    @Test(description = "Supply empty data SHOULD result in a 200")
-    public void testWithEmptyDataProvided() {
+    @Test(description = "Supply empty data SHOULD result in a 400 with an error message")
+    public void testGetStatsWithEmptyDataProvided() {
         Response response = given().accept(ContentType.JSON).body("{}").post(path);
         response.then().statusCode(400);
         // BUG executed a 400 here
-        String stringOut = response.asString();
-        assertTrue(isJSONValid(stringOut));
-        JsonPath jsonPath = response.jsonPath();
-        assertTrue(jsonPath.getInt("TotalRequests") >= 0, "Total Requests should be a positive number");
-        assertTrue(jsonPath.getInt("AverageTime") >= 0, "Total Requests should be a positive number");
+        assertTrue(response.asString().trim().contains(("SOME ERROR MESSAGE")));
     }
 
     @Test(description = "Supply data portion of the request, SHOULD result in a 400 with any error message stating Data not allowed")
     public void testWithProvingData() {
         Response response = given().accept(ContentType.JSON).body("{\"password\":\"\"}").post(path);
-        response.then().statusCode(400);
         assertTrue(response.getBody().asString().contains("No data should be provided"));
+        response.then().statusCode(400);
     }
 
     @Test(description = "Happy path - Validated that the data structure response in JSON")

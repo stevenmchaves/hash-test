@@ -1,38 +1,11 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<!DOCTYPE suite SYSTEM "http://testng.org/testng-1.0.dtd">
+<!DOCTYPE suite SYSTEM "http://testng.org/testng-1.0.dtd" >
+
 <suite name="Non desctructive Password Hashing Test Suite">
     <test verbose="2" preserve-order="true" name="Password Hashing Test">
         <classes>
-            <class name="org.chaves.steven.PasswordGetHashingTest">
-                <methods>
-                    <include name="testGetAPI"/>
-                    <include name="testGetAPIInvalidParameters"/>
-                    <include name="testWithEmptyDataProvided"/>
-                    <include name="testJobIdNotFound"/>
-                    <include name="testHappyPath"/>
-                </methods>
-            </class>
-            <class name="org.chaves.steven.PasswordPostHashingTest">
-                <methods>
-                    <include name="testPostAPI"/>
-                    <include name="testGetAPIInvalidParameters"/>
-                    <include name="testWithEmptyDataProvided"/>
-                    <include name="testWithInvalidDataNoPasswordValue"/>
-                    <include name="testWithInvalidDataKeyValue"/>
-                    <include name="testValidateResponseTime"/>
-                    <include name="testHappyPathValidateSHA512"/>
-                    <include name="testHappyPathSHA512"/>
-                </methods>
-            </class>
-            <class name="org.chaves.steven.PasswordStatsHashingTest">
-                <methods>
-                    <include name="testWithParameters"/>
-                    <include name="testWithEmptyDataProvided"/>
-                    <include name="testWithProvingData"/>
-                    <include name="testHappyPath"/>
-                    <include name="testStatsTotalRequests"/>
-                </methods>
-            </class>
+            <class name="org.chaves.steven.PasswordGetHashingTest"/>
+            <class name="org.chaves.steven.PasswordPostHashingTest"/>
+            <class name="org.chaves.steven.PasswordStatsHashingTest"/>
         </classes>
-    </test>
+    </test> 
 </suite>
