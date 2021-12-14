@@ -42,13 +42,13 @@ The test cases/validation points below are validated by running the `shutdown.xm
 * Test case - Hashing algorithm doesn't seem to be `SHA512` based on the test conducted for password. - See `testHappyPathValidatePasswordSHA512`
 * Test case - Post is supported with no data - `Malformed Input - 400` (See `testPostApi`)
 * Test case - Post with invalid parameters - See `testPostAPIInvalidParameters`
-* Test case - Post with empty data - See `testWithEmptyDataProvided`
-* Test case - Post with password, but with no value - See `testWithInvalidDataNoPasswordValue`
+* Test case - Post with empty data - See `testPostWithEmptyDataProvided`
+* Test case - Post with password, but with no value - See `testPostWithInvalidDataNoPasswordValue`
     <b>BUG: Seems to be a bug as this should not allow empty password</b>
-* Test case - invalid key in the data - See `testWithInvalidDataKeyValue`
+* Test case - invalid key in the data - See `testPostWithInvalidDataKeyValue`
     <b>BUG: Should probably returned 400 with something about fomrat being incorrect </b>
-* Test case - validate response time - Validated that 5 seconds elapses for a job identifier to be created and password hash is generated. - See `testValidateResponseTime`
-* Test case - Confirm that entire data json is not being used for SHA512- See `testNotAllJsonDataSHA512`
+* Test case - validate response time - Validated that 5 seconds elapses for a job identifier to be created and password hash is generated. - See `testPostValidateResponseTime`
+* Test case - Confirm that entire data json is not being used for SHA512- See `testPostNotAllJsonDataSHA512`
 
 #### GET `/hash` - PasswordGetHashingTest
 * Test case - call API without job identifier. See `testGetAPI`
@@ -58,11 +58,11 @@ The test cases/validation points below are validated by running the `shutdown.xm
 * Test case - Happy path - Validated that the string returned in `base64` encoded and Job Identifier exists - See `testHappyPath`
 
 #### GET `/stats` - PasswordStatsHashingTest
-* Test case - Supply parameters - See `testWithParameters`
-* Test case - Validated that accepts no data - See `testWithProvingData` <br>
-* Test case - Validated that accepts empty data - See `testWithEmptyDataProvided`
+* Test case - Supply parameters - See `testGetStatsWithParameters` method.
+* Test case - Validated that accepts no data - See `testGetStatsWithProvidingData` method.
+* Test case - Validated that accepts empty data - See `testGetStatsWithEmptyDataProvided` method.
     <b> BUG - Expected a 400 here with some type of error message. Same as test case above</b>
-* Test case - Happy path - Validated that the data structure response in JSON - See `testHappyPath`
+* Test case - Happy path - Validated that the data structure response in JSON - See `testGetStatsHappyPath` method.
 * Test case - Total requests get incremented - Validated that the response has `TotalRequests` since the server started See `testStatsTotalRequests`
     <b> BUG - This doesn't seem to be working correctly. Either it takes 5 seconds to be updated because it does increment sometimes.
 * Test case - Validated that the respose when no requests were sent is 0 Total Requests and 0 AverageTime

@@ -25,7 +25,7 @@ public class PasswordStatsHashingTest {
         baseURI = "http://127.0.0.1:8090";
     }
     @Test(description = "with invalid parameters")
-    public void testWithParameters() {
+    public void testGetStatsWithParameters() {
         Response response = given().get(path + "/?key=5");
         response.then().statusCode(404);
         assertEquals(response.asString().trim(), "404 page not found");
@@ -40,14 +40,14 @@ public class PasswordStatsHashingTest {
     }
 
     @Test(description = "Supply data portion of the request, SHOULD result in a 400 with any error message stating Data not allowed")
-    public void testWithProvingData() {
+    public void testGetStatsWithProvidingData() {
         Response response = given().accept(ContentType.JSON).body("{\"password\":\"\"}").post(path);
         assertTrue(response.getBody().asString().contains("No data should be provided"));
         response.then().statusCode(400);
     }
 
     @Test(description = "Happy path - Validated that the data structure response in JSON")
-    public void testHappyPath() {
+    public void testGetStatsHappyPath() {
         Response response = given().post(path);
         response.then().statusCode(200);
         String stringOut = response.asString();

@@ -39,27 +39,32 @@ private String path = "/hash";
     @Test(description = "Post API call with invalid parameters")
     public void testPostAPIInvalidParameters() {
         Response response = given().post(path + "/?key=5");
-        response.then().statusCode(404);
-        assertEquals(response.asString().trim(), "404 page not found");
+        response.then().statusCode(405);
+        assertEquals(response.asString().trim(), "POST Not Supported");
     }
 
     @Test(description = "without any data portion of the request, SHOULD result in a 400 with any error message stating password information is needed", timeOut = 5100L)
-    public void testWithEmptyDataProvided() {
-        Response response = given().accept(ContentType.JSON).body("{}").post(path); 
-        response.then().statusCode(200);
-        assertTrue(response.getBody().asString().contains("Password needed"), "Password should have been supplied");
-    }
-
-    @Test(description = "without password in the data portion of the request, SHOULD result in a 400 with any error message stating password is needed", timeOut = 5100L)
-    public void testWithInvalidDataNoPasswordValue() {
-        Response response = given().accept(ContentType.JSON).body("{\"password\":\"\"}").post(path); 
+    public void testPostWithEmptyDataProvided() {
+        Response response = given().accept(ContentType.JSON).body("{}").post(path);
         response.then().statusCode(400);
-        //BUG Should not allow for empty password
-        assertTrue(response.getBody().asString().contains("Password needed"), "Password should have been supplied");
+        // An error message
+        String responseString = response.asString();
+        assertTrue(responseString.contains("Password needed"), String.format("Error message: %s should have contained: Password needed", responseString));
     }
 
     @Test(description = "without password in the data portion of the request, SHOULD result in a 400 with any error message stating password is needed", timeOut = 5100L)
-    public void testWithInvalidDataKeyValue() {
+    public void testPostWithInvalidDataNoPasswordValue() {
+        Response response = given().accept(ContentType.JSON).body("{\"password\":\"\"}").post(path);
+        // BUG Should not allow for empty password
+        response.then().statusCode(400);
+        // An error message
+        String responseString = response.asString();
+        assertTrue(responseString.contains("Password needed"), String.format("Error message: %s should have contained: Password needed", responseString));
+
+    }
+
+    @Test(description = "without password in the data portion of the request, SHOULD result in a 400 with any error message stating password is needed", timeOut = 5100L)
+    public void testPostWithInvalidDataKeyValue() {
         Response response = given().accept(ContentType.JSON).body("{\"psswrd\":\"\"}").post(path);
         response.then().statusCode(200);
         //BUG Should probably returned 400 with something about fomrat being incorrect
@@ -67,7 +72,7 @@ private String path = "/hash";
     }
 
     @Test(description = "Happy path confirm Time of approximately of 5 seconds", timeOut = 5100L)
-    public void testValidateResponseTime() {
+    public void testPostValidateResponseTime() {
         Response response = given().accept(ContentType.JSON).body("{\"password\":\"angrymonkey\"}").post(path);
         response.then().statusCode(200);
         long timeInMs = response.getTime();
@@ -78,7 +83,7 @@ private String path = "/hash";
     }
 
     @Test(description = "Happy path confirm validate password SHA512 is being used")
-    public void testHappyPathValidatePasswordSHA512() {
+    public void testPostHappyPathValidatePasswordSHA512() {
         Response response = given().accept(ContentType.JSON).body("{\"password\":\"angrymonkey\"}").post(path);
         response.then().statusCode(200);
         String stringOut = response.asString();
@@ -93,7 +98,7 @@ private String path = "/hash";
     }
 
     @Test(description = "Confirm that entire data json is not being used for SHA512")
-    public void testNotAllJsonDataSHA512() {
+    public void testPostNotAllJsonDataSHA512() {
         String jsonBody = "{\"password\":\"angrymonkey\"}";
         Response response = given().accept(ContentType.JSON).body(jsonBody).post(path);
         response.then().statusCode(200);
