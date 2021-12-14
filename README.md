@@ -13,23 +13,23 @@ This assignment was done leveraging `Java`, `mvn`, `RestAssured`, `TestNG, and s
 
 ## Test Cases Covered in Test Automation
 
-* Application only answers on the PORT specified in the PORT environment
+### PasswordPortTest
+* Application only answers on the PORT specified in the PORT environment (See `testInvalidPort`)
 
 ### Concurrency
 * Validated that simultaneousl requests can be made meaning that multiconnections can be made. This can be seen in the execution of the `concurrency.xml` TestNG.xml file <br>
-  The execution runs to test run concurrently in 5 threads. See `org.chaves.steven.PasswordConcurrencyTest` for further information. 
+  The execution runs to test run concurrently in 5 threads. (Runs `testTwoCallsA` and `testTwoCallsB` conccurently) <br> See `org.chaves.steven.PasswordConcurrencyTest` for further information. 
 
 #### Execute concurrency tests
 1. Start the server up first.
 1. `mvn test -P concurrency-test`
 
-
 ### Shutdown
 The test cases/validation points below are validated by running the `shutdown.xml` TestNG file. This file runs test methods concurrently which allows the validates of the pending request validations to occur. See  `org.chaves.steven.PasswordShutdownTest` for further information.
 * Found that there are occurences on shutdown that the `port` is left open
-* Validated that In-flight requests are completed
-* Validated that rejects for new requests are done. Was not able to validated
-* Validated that any additional while shutdown is is pending or completed results in `Connection refused`
+* Validated that In-flight requests are completed (see `testMultipleCalls`)
+* Validated that rejects for new requests are done. Was not able to validated (see `testMultipleCalls` and `testShutdown`)
+* Validated that any additional while shutdown is is pending or completed results in `Connection refused` (see `testMultipleCalls` and `testShutdown`)
 
 #### Execute shutdown tests
 1. Start the server up first.
@@ -38,22 +38,39 @@ The test cases/validation points below are validated by running the `shutdown.xm
 
 ### Standard Set of tests
 
-#### POST `/hash`
-* Validated that 5 seconds elapses for a job identifier to be created and password hash is generated.
-* Hashing algorithm doesn't seem to be `SHA512` based on the test conducted.
+#### POST `/hash` - PasswordPostHashingTest
+* Test case - Hashing algorithm doesn't seem to be `SHA512` based on the test conducted for password. - See `testHappyPathValidatePasswordSHA512`
+* Test case - Post is supported with no data - `Malformed Input - 400` (See `testPostApi`)
+* Test case - Post with invalid parameters - See `testPostAPIInvalidParameters`
+* Test case - Post with empty data - See `testWithEmptyDataProvided`
+* Test case - Post with password, but with no value - See `testWithInvalidDataNoPasswordValue`
+    <b>BUG: Seems to be a bug as this should not allow empty password</b>
+* Test case - invalid key in the data - See `testWithInvalidDataKeyValue`
+    <b>BUG: Should probably returned 400 with something about fomrat being incorrect </b>
+* Test case - validate response time - Validated that 5 seconds elapses for a job identifier to be created and password hash is generated. - See `testValidateResponseTime`
+* Test case - Confirm that entire data json is not being used for SHA512- See `testNotAllJsonDataSHA512`
 
-#### GET `/hash`
-* Validated that a job identifier is accepted
-* Validated that the string returned in `base64` encoded
+#### GET `/hash` - PasswordGetHashingTest
+* Test case - call API without job identifier. See `testGetAPI`
+* Test case - Get call with invalid parametersValidated that a job identifier is accepted. See `testGetAPIInvalidParameters`
+* Test case - No job identifier and supply empty data. See `testWithEmptyDataProvided`
+* Test case - Job Identifier does not exist - See `testJobIdNotFound`
+* Test case - Happy path - Validated that the string returned in `base64` encoded and Job Identifier exists - See `testHappyPath`
 
-#### GET `/stats`
-* Validated that accepts no data
-* Validated that accepts empty data
-* Validated that the data structure response in JSON
-* Validated that the response has `TotalRequests` since the server started
-* Validated that the respose when no requests were sent is 0 Total Requests and 0 AverageTime
-* Validated that the response has 'AverageTime` in milliseconds
+#### GET `/stats` - PasswordStatsHashingTest
+* Test case - Supply parameters - See `testWithParameters`
+* Test case - Validated that accepts no data - See `testWithProvingData` <br>
+* Test case - Validated that accepts empty data - See `testWithEmptyDataProvided`
+    <b> BUG - Expected a 400 here with some type of error message. Same as test case above</b>
+* Test case - Happy path - Validated that the data structure response in JSON - See `testHappyPath`
+* Test case - Total requests get incremented - Validated that the response has `TotalRequests` since the server started See `testStatsTotalRequests`
+    <b> BUG - This doesn't seem to be working correctly. Either it takes 5 seconds to be updated because it does increment sometimes.
+* Test case - Validated that the respose when no requests were sent is 0 Total Requests and 0 AverageTime
+* Test case - Validated that the response has 'AverageTime` in milliseconds
 
 #### Execute standard set
 1. Make sure the server is started
 1. `mvn test`
+
+
+Please reach out to me: `stevenmchaves@gmail.com` for further information.
