@@ -59,8 +59,7 @@ public class PasswordShutdownTest {
             // restart server
             if (OsUtils.isWindows()) {
                 try {
-                    Thread.sleep(2000); // wait a little while before restart
-                    System.out.println("User Dir: " + System.getProperty("user.dir"));
+                    Thread.sleep(5000); // wait a little while before restart
                     assertTrue(Runtime.getRuntime().exec("cmd /c start broken-hashserve_win.exe").waitFor(1, TimeUnit.SECONDS),
                             "Unable to restart the server");
                 } catch (Exception e) {

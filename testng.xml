@@ -1,14 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE suite SYSTEM "http://testng.org/testng-1.0.dtd">
-<suite name="All Test Suite">
-    <test verbose="2" preserve-order="true" name="C:/hash-test">
+<suite name="Non desctructive Password Hashing Test Suite">
+    <test verbose="2" preserve-order="true" name="Password Hashing Test">
         <classes>
-            <class name="org.chaves.steven.PasswordConcurrencyTest">
-                <methods>
-                    <include name="testTwoCallsA"/>
-                    <include name="testTwoCallsB"/>
-                </methods>
-            </class>
             <class name="org.chaves.steven.PasswordGetHashingTest">
                 <methods>
                     <include name="testGetAPI"/>
@@ -28,12 +22,6 @@
                     <include name="testValidateResponseTime"/>
                     <include name="testHappyPathValidateSHA512"/>
                     <include name="testHappyPathSHA512"/>
-                </methods>
-            </class>
-            <class name="org.chaves.steven.PasswordShutdownTest">
-                <methods>
-                    <include name="testTwoCalls"/>
-                    <include name="testShutdown"/>
                 </methods>
             </class>
             <class name="org.chaves.steven.PasswordStatsHashingTest">
