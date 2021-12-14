@@ -23,27 +23,25 @@ public class PasswordPostHashingTest {
 
 private String path = "/hash";
 
-@BeforeClass
+    @BeforeClass
     public void beforeClass() {
-// Setting BaseURI once
-baseURI = "http://127.0.0.1:8090";
-}
+        // Setting BaseURI once
+        baseURI = "http://127.0.0.1:8090";
+    }
 
-@Test(description = "Post is supported with no data")
-public void testPostAPI() {
-    Response response = given().post(path);
-    response.then().statusCode(400);
-    assertEquals(response.getBody().asString().trim(), "Malformed Input");
-}
+    @Test(description = "Post is supported with no data")
+    public void testPostAPI() {
+        Response response = given().post(path);
+        response.then().statusCode(400);
+        assertEquals(response.getBody().asString().trim(), "Malformed Input");
+    }
 
-
-
-@Test(description = "Get API call with invalid parameters")
-public void testGetAPIInvalidParameters() {
-    Response response = given().get("/?key=5");
-    response.then().statusCode(404);
-    assertEquals(response.asString().trim(), "404 page not found");
-}
+    @Test(description = "Post API call with invalid parameters")
+    public void testPostAPIInvalidParameters() {
+        Response response = given().post(path + "/?key=5");
+        response.then().statusCode(404);
+        assertEquals(response.asString().trim(), "404 page not found");
+    }
 
     @Test(description = "without any data portion of the request, SHOULD result in a 400 with any error message stating password information is needed", timeOut = 5100L)
     public void testWithEmptyDataProvided() {
@@ -64,7 +62,7 @@ public void testGetAPIInvalidParameters() {
     public void testWithInvalidDataKeyValue() {
         Response response = given().accept(ContentType.JSON).body("{\"psswrd\":\"\"}").post(path);
         response.then().statusCode(200);
-        //BUG Should not allow for empty password
+        //BUG Should probably returned 400 with something about fomrat being incorrect
         assertTrue(response.getBody().asString().contains("Password needed"), "Password should have been supplied");
     }
 
@@ -94,8 +92,8 @@ public void testGetAPIInvalidParameters() {
         assertEquals(stringOut.trim(), HashUtils.encryptThisStringSHA512("angrymonkey"));
     }
 
-    @Test(description = "Happy path confirm on entire json SHA512 is being used")
-    public void testHappyPathValidateJsonSHA512() {
+    @Test(description = "Confirm that entire data json is not being used for SHA512")
+    public void testNotAllJsonDataSHA512() {
         String jsonBody = "{\"password\":\"angrymonkey\"}";
         Response response = given().accept(ContentType.JSON).body(jsonBody).post(path);
         response.then().statusCode(200);

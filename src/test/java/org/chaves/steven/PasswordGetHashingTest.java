@@ -12,7 +12,7 @@ import io.restassured.http.ContentType;
 import io.restassured.response.Response;
 
 /**
- * Testing against password hashing api.
+ * Testing against password get hashing api.
  */
 public class PasswordGetHashingTest {
 
@@ -39,7 +39,7 @@ public class PasswordGetHashingTest {
         assertEquals(response.asString().trim(), "404 page not found");
     }
 
-    @Test(description = "Data not allowed with no job identified")
+    @Test(description = "Data not allowed and no job identified")
     public void testWithEmptyDataProvided() {
         Response response = given().accept(ContentType.JSON).body("{}").get(path);
         response.then().statusCode(405);

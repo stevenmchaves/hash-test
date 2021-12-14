@@ -26,8 +26,8 @@ public class PasswordShutdownTest {
         baseURI = "http://127.0.0.1:8090";
     }
 
-    @Test(description = "Two calls")
-    public void testTwoCalls() {
+    @Test(description = "Multiple calls at least the first one should be allowed to continue and the others will depend on threading")
+    public void testMultipleCalls() {
         int i = 0;
         try {
             for (; i < 5; i++) {

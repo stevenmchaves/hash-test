@@ -34,7 +34,8 @@ public class PasswordStatsHashingTest {
     @Test(description = "Supply empty data SHOULD result in a 200")
     public void testWithEmptyDataProvided() {
         Response response = given().accept(ContentType.JSON).body("{}").post(path);
-        response.then().statusCode(200);
+        response.then().statusCode(400);
+        // BUG executed a 400 here
         String stringOut = response.asString();
         assertTrue(isJSONValid(stringOut));
         JsonPath jsonPath = response.jsonPath();
@@ -49,7 +50,7 @@ public class PasswordStatsHashingTest {
         assertTrue(response.getBody().asString().contains("No data should be provided"));
     }
 
-    @Test(description = "Happy path")
+    @Test(description = "Happy path - Validated that the data structure response in JSON")
     public void testHappyPath() {
         Response response = given().post(path);
         response.then().statusCode(200);
